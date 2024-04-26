@@ -34,62 +34,60 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(
-          left: 16,
-          right: 16,
-          bottom: 16,
-        ),
-        child: BlocConsumer<ChatPromptCubit, ChatPromptState>(
-          listener: (context, state) {
-            if (_textController.text != state.prompt) {
-              _textController.text = state.prompt;
-            }
-          },
-          builder: (context, state) {
-            return Column(
-              children: [
-                Expanded(
-                  child: ListView(
-                    children: List.generate(
-                      state.discussion.length,
-                      (i) => MessageView(state.discussion[i]),
-                    ),
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 16,
+        right: 16,
+        bottom: 16,
+      ),
+      child: BlocConsumer<ChatPromptCubit, ChatPromptState>(
+        listener: (context, state) {
+          if (_textController.text != state.prompt) {
+            _textController.text = state.prompt;
+          }
+        },
+        builder: (context, state) {
+          return Column(
+            children: [
+              Expanded(
+                child: ListView(
+                  children: List.generate(
+                    state.discussion.length,
+                    (i) => MessageView(state.discussion[i]),
                   ),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        focusNode: myFocusNode,
-                        autofocus: true,
-                        controller: _textController,
-                        onSubmitted: (value) {
-                          context.read<ChatPromptCubit>().sendPrompt();
-                          myFocusNode.requestFocus();
-                        },
-                        // onChanged: (value) =>
-                        //     context.read<ChatPromptCubit>().updatePrompt(value),
-                        decoration: const InputDecoration(
-                          hintText: 'Ask something!',
-                          // label: Text('Ask something!'),
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      focusNode: myFocusNode,
+                      autofocus: true,
+                      controller: _textController,
+                      onSubmitted: (value) {
                         context.read<ChatPromptCubit>().sendPrompt();
                         myFocusNode.requestFocus();
                       },
-                      icon: const Icon(Icons.send_rounded),
-                    )
-                  ],
-                )
-              ],
-            );
-          },
-        ),
+                      // onChanged: (value) =>
+                      //     context.read<ChatPromptCubit>().updatePrompt(value),
+                      decoration: const InputDecoration(
+                        hintText: 'Ask something!',
+                        // label: Text('Ask something!'),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      context.read<ChatPromptCubit>().sendPrompt();
+                      myFocusNode.requestFocus();
+                    },
+                    icon: const Icon(Icons.send_rounded),
+                  )
+                ],
+              )
+            ],
+          );
+        },
       ),
     );
   }
