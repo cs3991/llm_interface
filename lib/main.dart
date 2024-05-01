@@ -1,11 +1,13 @@
 import 'package:chat_gui/chat/cubit/chat_prompt_cubit.dart';
 import 'package:chat_gui/chat/ui/chat_page.dart';
+import 'package:chat_gui/storage/cubit/chat_storage_cubit.dart';
 import 'package:chat_gui/storage/ui/chats_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const App());
 }
 
@@ -24,8 +26,11 @@ class App extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: BlocProvider(
-        create: (context) => ChatPromptCubit(),
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => ChatPromptCubit()),
+          BlocProvider(create: (context) => ChatStorageCubit()),
+        ],
         child: MainPage(),
       ),
     );
